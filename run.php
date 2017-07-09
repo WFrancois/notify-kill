@@ -36,7 +36,7 @@ foreach($guildToCheck as $guild) {
             if(in_array($news->achievement->id, $bossToTrack) && !in_array($news->timestamp, $alreadyFound)) {
                 $message = $guild[0] . ' KILLED ' . $news->achievement->title;
                 $alreadyFound[] = $news->timestamp;
-                sendSms($config['sms']['key'], $message);
+                sendSms($config['sms']['key'], $message, $config['sms']['to']);
             }
         }
     }
@@ -44,18 +44,21 @@ foreach($guildToCheck as $guild) {
 
 file_put_contents('notified.json', json_encode($alreadyFound));
 
-function sendSms($key, $message)
+function sendSms($key, $message, $to)
 {
     $ch = curl_init();
 
     $postFields = [
-        'token=' . curl_escape($ch, $key),
-        'message=' . curl_escape($ch, $message),
+        'token=' => curl_escape($ch, $key),
+        'message=' => curl_escape($ch, $message),
+        'to' => $to,
     ];
+
+
 
     curl_setopt($ch, CURLOPT_URL, 'https://sms.wisak.eu');
     curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, implode('&', $postFields));
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postFields));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
     curl_exec($ch);
