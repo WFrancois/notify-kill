@@ -49,8 +49,8 @@ function sendSms($key, $message, $to)
     $ch = curl_init();
 
     $postFields = [
-        'token=' => curl_escape($ch, $key),
-        'message=' => curl_escape($ch, $message),
+        'token' => $key,
+        'message' => $message,
         'to' => $to,
     ];
 
