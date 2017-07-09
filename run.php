@@ -18,7 +18,7 @@ $bossToTrack = [
     11781, # Kil'jaeden
 ];
 
-$file = file_get_contents('notified.json');
+$file = file_get_contents(__DIR__ . '/notified.json');
 
 $alreadyFound = [];
 
@@ -42,7 +42,7 @@ foreach($guildToCheck as $guild) {
     }
 }
 
-file_put_contents('notified.json', json_encode($alreadyFound));
+file_put_contents(__DIR__ . '/notified.json', json_encode($alreadyFound));
 
 function sendSms($key, $message, $to)
 {
